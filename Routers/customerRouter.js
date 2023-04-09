@@ -1,10 +1,13 @@
 const express = require('express')
 const router = express.Router()
 const { CustomerController } = require('../Controllers')
-const { Customer } = require('../Entities')
+const { CustomerService } = require('../Services')
+const { customerModel } = require('../Models')
+const { CustomerRepository } = require('../Data Access')
 
 // Dependency injection
-const customerService = new Customer()
+const customerRepository = new CustomerRepository(customerModel)
+const customerService = new CustomerService(customerRepository)
 const customerController = new CustomerController(customerService)
 
 // get all customer

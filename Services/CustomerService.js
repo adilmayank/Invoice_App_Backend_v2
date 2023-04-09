@@ -1,13 +1,10 @@
 const { customerInputFields } = require('../Utils/InputFields')
 
-const demoCustomer = [
-  { id: 1, name: 'Customer 1' },
-  { id: 2, name: 'Customer 2' },
-  { id: 3, name: 'Customer 3' },
-  { id: 4, name: 'Customer 4' },
-]
-
 class Customer {
+  constructor(customerRepository) {
+    this.customerRepository = customerRepository
+  }
+
   validation(type) {
     if (type === 'create') {
       if (!this.firstName || !this.contactNumber) {
@@ -31,39 +28,56 @@ class Customer {
     }
   }
 
-  getAllCustomers() {
-    return demoCustomer
-  }
-
-  getSingleCustomer(id) {
-    const parsedId = parseInt(id)
-    const filteredCustomer = demoCustomer.filter((item) => {
-      if (item.id === parsedId) {
-        return item
-      }
-    })
-    if (filteredCustomer.length === 0) {
-      throw new Error('No customer with this id found.')
+  async getAllCustomers() {
+    try {
+      const allCustomersData = await this.customerRepository.getAllCustomers()
+      return allCustomersData
+    } catch (error) {
+      return new Error('An error occured')
     }
-    return filteredCustomer
   }
 
-  updateCustomer(id, data) {
+  async getSingleCustomer(id) {
+    try {
+      const customerRecord =
+        await this.customerRepository.getSingleCustomerByProperty({
+          property: '_id',
+          value: id,
+        })
+      return customerRecord
+    } catch (error) {
+      console.log('error in service')
+      throw new Error(error.message)
+    }
+  }
+
+  async updateCustomer(id, data) {
     const transformedData = transformIncomingData(data)
 
     try {
       const validatedData = this.validation.call(transformedData, 'update')
-      return validatedData
+      console.log(validatedData)
+      const updatedCustomer = await this.customerRepository.updateCustomer(
+        id,
+        validatedData
+      )
+      return updatedCustomer
     } catch (error) {
       throw new Error(error.message)
     }
   }
 
-  updateActivatedStatus(id, activatedStatus) {
-    return { id, activatedStatus }
+  async updateActivatedStatus(id, isActiveStatus) {
+    try {
+      const updatedCustomer =
+        await this.customerRepository.updateActivationStatus(id, isActiveStatus)
+      return updatedCustomer
+    } catch (error) {
+      throw new Error(error.message)
+    }
   }
 
-  createNewCustomer(data) {
+  async createNewCustomer(data) {
     const transformedData = transformIncomingData(data)
     for (let field of customerInputFields) {
       this[field] = transformedData[field]
@@ -71,9 +85,12 @@ class Customer {
     this.validation.call(this, 'create')
     try {
       const validatedData = this.validation.call(this, 'create')
-      return validatedData
+      const newCustomerData = await this.customerRepository.createNewCustomer(
+        validatedData
+      )
+      return newCustomerData
     } catch (error) {
-      throw new Error(error.message)
+      return new Error(error.message)
     }
   }
 }

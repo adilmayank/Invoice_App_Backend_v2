@@ -3,53 +3,70 @@ class CustomerController {
     this.customerService = customerService
   }
 
-  getAllCustomers = (req, res) => {
+  getAllCustomers = async (req, res) => {
     try {
-      const allCustomer = this.customerService.getAllCustomers()
+      const allCustomer = await this.customerService.getAllCustomers()
       res.formattedJson(null, true, 'Done', allCustomer)
     } catch (error) {
       res.formattedJson(true, false, error.message, null)
     }
   }
 
-  getSingleCustomer = (req, res) => {
+  getSingleCustomer = async (req, res) => {
     const { id } = req.params
 
     try {
-      const singleCustomer = this.customerService.getSingleCustomer(id)
-      res.formattedJson(null, true, 'done', singleCustomer)
+      const singleCustomer = await this.customerService.getSingleCustomer(id)
+
+      if (!singleCustomer) {
+        res.formattedJson(null, true, 'no record found', singleCustomer)
+      } else {
+        res.formattedJson(null, true, 'done', singleCustomer)
+      }
     } catch (error) {
       res.formattedJson(true, false, error.message, null)
     }
   }
 
-  updateSingleCustomer = (req, res) => {
+  updateSingleCustomer = async (req, res) => {
     const { id, data } = req.body
 
     try {
-      const updatedCustomer = this.customerService.updateCustomer(id, data)
+      const updatedCustomer = await this.customerService.updateCustomer(
+        id,
+        data
+      )
       res.formattedJson(null, true, 'done', updatedCustomer)
     } catch (error) {
       res.formattedJson(true, false, error.message, null)
     }
   }
 
-  updateActivatedStatus = (req, res) => {
-    const { id, activatedStatus } = req.body
+  updateActivatedStatus = async (req, res) => {
+    const { id, isActiveStatus } = req.body
 
     try {
-      const updateStatus = this.customerService.updateActivatedStatus(id, activatedStatus)
-      res.formattedJson(null, true, 'Status updated successfully', updateStatus)
+      const updatedCustomer = await this.customerService.updateActivatedStatus(
+        id,
+        isActiveStatus
+      )
+      console.log(updatedCustomer)
+      res.formattedJson(
+        null,
+        true,
+        'Status updated successfully',
+        updatedCustomer
+      )
     } catch (error) {
       res.formattedJson(true, false, error.message, null)
     }
   }
 
-  createNewCustomer = (req, res) => {
+  createNewCustomer = async (req, res) => {
     const { data } = req.body
 
     try {
-      const newCustomer = this.customerService.createNewCustomer(data)
+      const newCustomer = await this.customerService.createNewCustomer(data)
       res.formattedJson(
         null,
         true,
@@ -63,5 +80,5 @@ class CustomerController {
 }
 
 module.exports = {
-  CustomerController
+  CustomerController,
 }
