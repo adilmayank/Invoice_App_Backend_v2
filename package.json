@@ -1,0 +1,17 @@
+{
+  "name": "invoice_app_v2",
+  "version": "1.0.0",
+  "description": "Second iteration of Inovice App Backend",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Adil Mayank",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "nodemon": "^2.0.22"
+  }
+}
