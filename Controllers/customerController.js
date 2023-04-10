@@ -50,7 +50,6 @@ class CustomerController {
         id,
         isActiveStatus
       )
-      console.log(updatedCustomer)
       res.formattedJson(
         null,
         true,

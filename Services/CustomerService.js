@@ -46,7 +46,6 @@ class Customer {
         })
       return customerRecord
     } catch (error) {
-      console.log('error in service')
       throw new Error(error.message)
     }
   }
@@ -56,7 +55,6 @@ class Customer {
 
     try {
       const validatedData = this.validation.call(transformedData, 'update')
-      console.log(validatedData)
       const updatedCustomer = await this.customerRepository.updateCustomer(
         id,
         validatedData

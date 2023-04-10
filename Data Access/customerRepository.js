@@ -27,7 +27,6 @@ class CustomerRepository {
       }
       return customerRecord
     } catch (error) {
-      console.log('error in repo')
       throw new Error(error.message)
     }
   }
