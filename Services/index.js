@@ -1,3 +1,7 @@
-const { Customer } = require('./CustomerService')
+const { Customer } = require('./customerService')
+const { ContactAgent } = require('./contactAgentService')
 
-module.exports = { CustomerService: Customer }
+module.exports = {
+  CustomerService: Customer,
+  ContactAgentService: ContactAgent,
+}

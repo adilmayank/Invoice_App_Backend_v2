@@ -1,8 +1,8 @@
 const { customerInputFields } = require('../Utils/InputFields')
 
 class Customer {
-  constructor(customerRepository) {
-    this.customerRepository = customerRepository
+  constructor(customersRepository) {
+    this.customersRepository = customersRepository
   }
 
   validation(type) {
@@ -30,7 +30,7 @@ class Customer {
 
   async getAllCustomers() {
     try {
-      const allCustomersData = await this.customerRepository.getAllCustomers()
+      const allCustomersData = await this.customersRepository.getAllCustomers()
       return allCustomersData
     } catch (error) {
       return new Error('An error occured')
@@ -40,7 +40,7 @@ class Customer {
   async getSingleCustomer(id) {
     try {
       const customerRecord =
-        await this.customerRepository.getSingleCustomerByProperty({
+        await this.customersRepository.getSingleCustomerByProperty({
           property: '_id',
           value: id,
         })
@@ -55,7 +55,7 @@ class Customer {
 
     try {
       const validatedData = this.validation.call(transformedData, 'update')
-      const updatedCustomer = await this.customerRepository.updateCustomer(
+      const updatedCustomer = await this.customersRepository.updateCustomer(
         id,
         validatedData
       )
@@ -68,7 +68,7 @@ class Customer {
   async updateActivatedStatus(id, isActiveStatus) {
     try {
       const updatedCustomer =
-        await this.customerRepository.updateActivationStatus(id, isActiveStatus)
+        await this.customersRepository.updateActivationStatus(id, isActiveStatus)
       return updatedCustomer
     } catch (error) {
       throw new Error(error.message)
@@ -83,7 +83,7 @@ class Customer {
     this.validation.call(this, 'create')
     try {
       const validatedData = this.validation.call(this, 'create')
-      const newCustomerData = await this.customerRepository.createNewCustomer(
+      const newCustomerData = await this.customersRepository.createNewCustomer(
         validatedData
       )
       return newCustomerData
