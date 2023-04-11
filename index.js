@@ -1,4 +1,4 @@
-require("dotenv").config()
+require('dotenv').config()
 const express = require('express')
 const mongoose = require('mongoose')
 
@@ -6,8 +6,11 @@ const app = express()
 
 const PORT = process.env.production || 5000
 
-const { customerRouter } = require('./Routers')
-const { contactAgentRouter } = require('./Routers')
+const {
+  customerRouter,
+  contactAgentRouter,
+  paymentTermRouter,
+} = require('./Routers')
 const { formatResponse } = require('./Middlewares/FormatResponse')
 
 app.use(express.json())
@@ -18,8 +21,12 @@ app.use(formatResponse)
 // Customer request handler
 app.use(customerRouter)
 
-// Customer request handler
+// Contact agent request handler
 app.use(contactAgentRouter)
+
+// Payment term request handler
+app.use(paymentTermRouter)
+
 
 // Not found
 app.get('*', (req, res) => {

@@ -27,10 +27,10 @@ class ContactAgent {
     }
   }
 
-  async removeContactAgent(id, data) {
+  async removeContactAgent(id) {
     try {
       const removedContactAgent =
-        await this.contactAgentRepository.removeContactAgent(id, data)
+        await this.contactAgentRepository.removeContactAgent(id)
       return removedContactAgent
     } catch (error) {
       throw new Error(error.message)

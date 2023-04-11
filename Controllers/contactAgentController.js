@@ -44,11 +44,11 @@ class ContactAgentController {
   }
 
   removeContactAgent = async (req, res) => {
-    const { id, data } = req.body
+    const { id } = req.body
 
     try {
       const removedContactAgent =
-        await this.contactAgentService.removeContactAgent(id, data)
+        await this.contactAgentService.removeContactAgent(id)
       if (removedContactAgent instanceof Error) {
         throw new Error(removedContactAgent.message)
       } else {

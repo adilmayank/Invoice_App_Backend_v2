@@ -1,19 +1,33 @@
 const { customerInputFields } = require('../Utils/InputFields')
 
 class Customer {
-  constructor(customersRepository) {
+  constructor(customersRepository, contactAgentsRepository = null) {
     this.customersRepository = customersRepository
+    this.contactAgentsRepository = contactAgentsRepository
   }
 
   validation(type) {
     if (type === 'create') {
-      if (!this.firstName || !this.contactNumber) {
-        throw new Error('First name and Contact number is mandatory')
+      if (!this.name) {
+        throw new Error('Customer name is mandatory')
+      }
+      if (!this.email) {
+        throw new Error('Customer email is mandatory')
+      }
+      if (!this.phone) {
+        throw new Error('Customer phone is mandatory')
+      }
+      if (!this.uniqueBusinessIdentifier) {
+        throw new Error('Customer Unique Business Identifier is mandatory')
+      }
+      if (!this.address) {
+        throw new Error('Customer address is mandatory')
       }
       return this
     }
 
     if (type === 'update') {
+      // wait
       if (
         this.firstName === '' ||
         this.firstName === null ||
@@ -68,7 +82,10 @@ class Customer {
   async updateActivatedStatus(id, isActiveStatus) {
     try {
       const updatedCustomer =
-        await this.customersRepository.updateActivationStatus(id, isActiveStatus)
+        await this.customersRepository.updateActivationStatus(
+          id,
+          isActiveStatus
+        )
       return updatedCustomer
     } catch (error) {
       throw new Error(error.message)
@@ -80,9 +97,12 @@ class Customer {
     for (let field of customerInputFields) {
       this[field] = transformedData[field]
     }
-    this.validation.call(this, 'create')
     try {
-      const validatedData = this.validation.call(this, 'create')
+      if (this.contactAgentsRepository) {
+        // create contact agent and get its _id
+      }
+
+      const validatedData = this.validation.call(transformedData, 'create')
       const newCustomerData = await this.customersRepository.createNewCustomer(
         validatedData
       )
@@ -95,6 +115,7 @@ class Customer {
 
 const transformIncomingData = (incomingData) => {
   const transformedData = {}
+  console.log(incomingData)
 
   for (let field of customerInputFields) {
     if (incomingData.hasOwnProperty(field)) {

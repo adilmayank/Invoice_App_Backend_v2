@@ -5,7 +5,7 @@ const customerSchema = new Schema({
   name: { type: String, required: true },
   email: { type: String, required: true },
   phone: { type: String, required: true },
-  unique_business_identifier: {
+  uniqueBusinessIdentifier: {
     type: {
       name: { type: String },
       value: { type: String },

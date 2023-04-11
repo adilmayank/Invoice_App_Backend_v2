@@ -1,8 +1,12 @@
 const customerInputFields = [
-  'firstName',
-  'lastName',
-  'emailId',
-  'contactNumber',
+  "name",
+  "email",
+  "phone",
+  "uniqueBusinessIdentifier",
+  "address",
+  "contactAgents",
+  "paymentType",
+  "paymentTerm"
 ]
 
 module.exports = { customerInputFields }
