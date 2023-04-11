@@ -76,6 +76,24 @@ class CustomerController {
       res.formattedJson(true, false, error.message, null)
     }
   }
+
+  addContactAgent = async (req, res) => {
+    const {data} = req.body
+    const {id} = req.params
+
+    try {
+      const updatedCustomer = await this.customerService.addContactAgent(id, data)
+      res.formattedJson(
+        null,
+        true,
+        'Contact agent added successfully',
+        updatedCustomer
+      )
+    } catch (error) {
+      res.formattedJson(true, false, error.message, null)
+    }
+    
+  }
 }
 
 module.exports = {

@@ -23,7 +23,11 @@ class CustomerRepository {
       filter[property] = value
       const customerRecord = await this.customerModel
         .findOne(filter)
-        .populate({path: "paymentTerm", select:"name description -_id"})
+        .populate({ path: 'paymentTerm', select: 'name description -_id' })
+        .populate({
+          path: 'contactAgents',
+          select: 'name emailId phoneNumber -_id',
+        })
         .lean()
       if (customerRecord === null) {
         return new Error('No records found.')
@@ -51,6 +55,29 @@ class CustomerRepository {
         .findByIdAndUpdate(id, { isActive: isActiveStatus }, { new: true })
         .lean()
       return updateCustomer
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
+
+  async addOrRemoveContactAgent(operationType, customerId, agentId) {
+    let updatedCustomer
+    try {
+      if (operationType === 'add') {
+        updatedCustomer = await this.customerModel
+          .findByIdAndUpdate(customerId, {
+            $addToSet: { contactAgents: agentId },
+          })
+          .lean()
+      } else if (operationType === 'remove') {
+        updatedCustomer = await this.customerModel
+          .findByIdAndUpdate(customerId, { $pull: { contactAgents: agentId } })
+          .lean()
+      }
+      if (!updatedCustomer) {
+        return new Error('Customer data not found.')
+      }
+      return updatedCustomer
     } catch (error) {
       throw new Error(error.message)
     }

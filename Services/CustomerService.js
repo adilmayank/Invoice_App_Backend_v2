@@ -111,6 +111,18 @@ class Customer {
       return new Error(error.message)
     }
   }
+
+  async addContactAgent(id, data) {
+    try {
+      const {contactAgentId} = data
+      const updatedCustomer = await this.customersRepository.addOrRemoveContactAgent("add", id, contactAgentId)
+      if(updatedCustomer instanceof Error) {
+        throw new Error(updatedCustomer.message)
+      }
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
 }
 
 const transformIncomingData = (incomingData) => {

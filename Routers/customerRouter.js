@@ -22,6 +22,9 @@ router.get('/api/v2/customers/:id', customerController.getSingleCustomer)
 // update single customer
 router.patch('/api/v2/customers', customerController.updateSingleCustomer)
 
+// add or remove a contact agent for a customer
+router.patch('/api/v2/customers/:id/contact-agents', customerController.addContactAgent)
+
 // change isActive Flag
 router.patch(
   '/api/v2/customers/change-activation-status',
