@@ -94,6 +94,24 @@ class CustomerController {
     }
     
   }
+
+  removeContactAgent = async (req, res) => {
+    const {id, agentId} = req.params
+    console.log(id, agentId)
+
+    try {
+      const updatedCustomer = await this.customerService.removeContactAgent(id, agentId)
+      res.formattedJson(
+        null,
+        true,
+        'Contact agent removed successfully',
+        updatedCustomer
+      )
+    } catch (error) {
+      res.formattedJson(true, false, error.message, null)
+    }
+    
+  }
 }
 
 module.exports = {
