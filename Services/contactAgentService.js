@@ -6,6 +6,16 @@ class ContactAgent {
   // data validation logic here
   validation(type) {}
 
+  async getSingleContactAgent(agentId) {
+    try {
+      const singleContactAgent =
+        await this.contactAgentRepository.getSingleContactAgent(agentId)
+      return singleContactAgent
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
+
   async getAllContactAgents() {
     try {
       const allContactAgents =
