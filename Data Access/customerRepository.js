@@ -21,7 +21,10 @@ class CustomerRepository {
     try {
       const filter = {}
       filter[property] = value
-      const customerRecord = await this.customerModel.findOne(filter).lean()
+      const customerRecord = await this.customerModel
+        .findOne(filter)
+        .populate({path: "paymentTerm", select:"name description -_id"})
+        .lean()
       if (customerRecord === null) {
         return new Error('No records found.')
       }

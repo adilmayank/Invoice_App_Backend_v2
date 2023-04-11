@@ -3,6 +3,20 @@ class ContactAgentController {
     this.contactAgentService = contactAgentService
   }
 
+  getAllContactAgents = async (req, res) => {
+    try {
+      const allContactAgents = await this.contactAgentService.getAllContactAgents()
+      res.formattedJson(
+        null,
+        true,
+        'Contact Agent Fetched successfully',
+        allContactAgents
+      )
+    } catch (error) {
+      res.formattedJson(true, false, error.message, null)
+    }
+  }
+
   addContactAgent = async (req, res) => {
     const { data } = req.body
 
