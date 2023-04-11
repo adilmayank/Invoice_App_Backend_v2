@@ -12,6 +12,20 @@ class ContactAgentRepository {
     }
   }
 
+  async getSingleContactAgent(agentId) {
+    try {
+      const singleContactAgent = await this.contactAgentModel
+        .findOne({ _id: agentId })
+        .lean()
+      if (!singleContactAgent) {
+        return new Error("No contact agent found.")
+      }
+      return singleContactAgent
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
+
   async addContactAgent(data) {
     const { name, emailId, phoneNumber } = data
     try {
