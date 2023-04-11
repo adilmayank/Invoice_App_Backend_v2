@@ -114,14 +114,54 @@ class Customer {
 
   async addContactAgent(id, data) {
     try {
-      const {contactAgentId} = data
-      const updatedCustomer = await this.customersRepository.addOrRemoveContactAgent("add", id, contactAgentId)
-      if(updatedCustomer instanceof Error) {
+      const { contactAgentId } = data
+      const isAgentIdValid = await this.checkIfContactAgentExist(contactAgentId)
+      if (isAgentIdValid instanceof Error) {
+        throw new Error(isAgentIdValid.message)
+      }
+      const updatedCustomer =
+        await this.customersRepository.addOrRemoveContactAgent(
+          'add',
+          id,
+          contactAgentId
+        )
+      if (updatedCustomer instanceof Error) {
         throw new Error(updatedCustomer.message)
       }
     } catch (error) {
       throw new Error(error.message)
     }
+  }
+
+  async removeContactAgent(id, agentId) {
+    try {
+      const isAgentIdValid = await this.checkIfContactAgentExist(agentId)
+      if (isAgentIdValid instanceof Error) {
+        throw new Error(isAgentIdValid.message)
+      }
+      const updatedCustomer =
+        await this.customersRepository.addOrRemoveContactAgent(
+          'remove',
+          id,
+          agentId
+        )
+      if (updatedCustomer instanceof Error) {
+        throw new Error(updatedCustomer.message)
+      }
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
+
+  async checkIfContactAgentExist(agentId) {
+    try {
+      const contactAgentDetail =
+        await this.contactAgentsRepository.getSingleContactAgent(agentId)
+      if (contactAgentDetail instanceof Error) {
+        return new Error(contactAgentDetail.message)
+      }
+      return true
+    } catch (error) {}
   }
 }
 
