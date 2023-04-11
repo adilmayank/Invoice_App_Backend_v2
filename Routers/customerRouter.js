@@ -2,12 +2,14 @@ const express = require('express')
 const router = express.Router()
 const { CustomerController } = require('../Controllers')
 const { CustomerService } = require('../Services')
-const { CustomerRepository } = require('../Data Access')
-const { CustomerModel } = require('../Models')
+const { CustomerRepository, ContactAgentRepository } = require('../Data Access')
+const { CustomerModel, ContactAgentModel } = require('../Models')
 
 // Dependency injection
 const customerRepository = new CustomerRepository(CustomerModel)
-const customerService = new CustomerService(customerRepository)
+const contactAgentRepository = new ContactAgentRepository(ContactAgentModel)
+
+const customerService = new CustomerService(customerRepository, contactAgentRepository)
 const customerController = new CustomerController(customerService)
 
 // get all customer
@@ -24,6 +26,9 @@ router.patch('/api/v2/customers', customerController.updateSingleCustomer)
 
 // add or remove a contact agent for a customer
 router.patch('/api/v2/customers/:id/contact-agents', customerController.addContactAgent)
+
+// add or remove a contact agent for a customer
+router.patch('/api/v2/customers/:id/contact-agents/:agentId', customerController.removeContactAgent)
 
 // change isActive Flag
 router.patch(
