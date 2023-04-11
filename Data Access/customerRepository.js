@@ -65,13 +65,21 @@ class CustomerRepository {
     try {
       if (operationType === 'add') {
         updatedCustomer = await this.customerModel
-          .findByIdAndUpdate(customerId, {
-            $addToSet: { contactAgents: agentId },
-          })
+          .findByIdAndUpdate(
+            customerId,
+            {
+              $addToSet: { contactAgents: agentId },
+            },
+            { new: true }
+          )
           .lean()
       } else if (operationType === 'remove') {
         updatedCustomer = await this.customerModel
-          .findByIdAndUpdate(customerId, { $pull: { contactAgents: agentId } })
+          .findByIdAndUpdate(
+            customerId,
+            { $pull: { contactAgents: agentId } },
+            { new: true }
+          )
           .lean()
       }
       if (!updatedCustomer) {
