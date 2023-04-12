@@ -35,7 +35,6 @@ class PaymentTermController {
     }
   }
 
-
   removePaymentTerm = async (req, res) => {
     const { data } = req.body
 

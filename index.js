@@ -10,6 +10,7 @@ const {
   customerRouter,
   contactAgentRouter,
   paymentTermRouter,
+  productRouter,
 } = require('./Routers')
 const { formatResponse } = require('./Middlewares/FormatResponse')
 
@@ -27,6 +28,8 @@ app.use(contactAgentRouter)
 // Payment term request handler
 app.use(paymentTermRouter)
 
+// Product request handler
+app.use(productRouter)
 
 // Not found
 app.get('*', (req, res) => {
