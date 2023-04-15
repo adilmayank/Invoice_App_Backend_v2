@@ -8,9 +8,8 @@ const customerSchema = new Schema({
   uniqueBusinessIdentifier: {
     type: {
       name: { type: String },
-      value: { type: String },
+      value: { type: String, unique: true },
     },
-    unique: true,
     required: true,
   },
   address: {
