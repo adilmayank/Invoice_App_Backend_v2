@@ -108,7 +108,7 @@ class Customer {
       )
       return newCustomerData
     } catch (error) {
-      return new Error(error.message)
+      throw new Error(error.message)
     }
   }
 

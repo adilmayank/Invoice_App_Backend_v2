@@ -13,7 +13,7 @@ class CustomerRepository {
       const newCustomer = await this.customerModel({ ...data }).save()
       return newCustomer
     } catch (error) {
-      return new Error(error.message)
+      throw new Error(error.message)
     }
   }
 
