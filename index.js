@@ -11,6 +11,8 @@ const {
   contactAgentRouter,
   paymentTermRouter,
   productRouter,
+  quotationSummaryRouter,
+  taxRouter,
 } = require('./Routers')
 const { formatResponse } = require('./Middlewares/FormatResponse')
 
@@ -30,6 +32,12 @@ app.use(paymentTermRouter)
 
 // Product request handler
 app.use(productRouter)
+
+// Tax request handler
+app.use(taxRouter)
+
+// Quotation summary request handler
+app.use(quotationSummaryRouter)
 
 // Not found
 app.get('*', (req, res) => {
