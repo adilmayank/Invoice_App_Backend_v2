@@ -13,9 +13,8 @@ class CustomerController {
   }
 
   getSingleCustomer = async (req, res) => {
-    const { id } = req.params
-
     try {
+      const { id } = req.params
       const singleCustomer = await this.customerService.getSingleCustomer(id)
 
       if (!singleCustomer) {
@@ -29,12 +28,13 @@ class CustomerController {
   }
 
   updateSingleCustomer = async (req, res) => {
-    const { id, data } = req.body
-
     try {
+      const { id, data } = req.body
+      // some controller validation steps that will either return an validated data or throw an error
+      const validatedData = { ...data }
       const updatedCustomer = await this.customerService.updateCustomer(
         id,
-        data
+        validatedData
       )
       res.formattedJson(null, true, 'done', updatedCustomer)
     } catch (error) {
@@ -43,9 +43,9 @@ class CustomerController {
   }
 
   updateActivatedStatus = async (req, res) => {
-    const { id, isActiveStatus } = req.body
-
     try {
+      const { id, isActiveStatus } = req.body
+       // some controller validation steps that will either check whether isActiveStatus is boolean or throw an error
       const updatedCustomer = await this.customerService.updateActivatedStatus(
         id,
         isActiveStatus
@@ -62,9 +62,10 @@ class CustomerController {
   }
 
   createNewCustomer = async (req, res) => {
-    const { data } = req.body
-
+    
     try {
+      const { data } = req.body
+      // some controller validation steps that will either return an validated data or throw an error
       const newCustomer = await this.customerService.createNewCustomer(data)
       res.formattedJson(
         null,
@@ -78,11 +79,13 @@ class CustomerController {
   }
 
   addContactAgent = async (req, res) => {
-    const {data} = req.body
-    const {id} = req.params
-
     try {
-      const updatedCustomer = await this.customerService.addContactAgent(id, data)
+      const { contactAgentId } = req.body
+      const { id: customerId } = req.params
+      const updatedCustomer = await this.customerService.addContactAgent(
+        customerId,
+        contactAgentId
+      )
       res.formattedJson(
         null,
         true,
@@ -92,15 +95,15 @@ class CustomerController {
     } catch (error) {
       res.formattedJson(true, false, error.message, null)
     }
-    
   }
 
   removeContactAgent = async (req, res) => {
-    const {id, agentId} = req.params
-    console.log(id, agentId)
-
     try {
-      const updatedCustomer = await this.customerService.removeContactAgent(id, agentId)
+      const { id: customerId, agentId: contactAgentId } = req.params
+      const updatedCustomer = await this.customerService.removeContactAgent(
+        customerId,
+        contactAgentId
+      )
       res.formattedJson(
         null,
         true,
@@ -110,7 +113,6 @@ class CustomerController {
     } catch (error) {
       res.formattedJson(true, false, error.message, null)
     }
-    
   }
 }
 

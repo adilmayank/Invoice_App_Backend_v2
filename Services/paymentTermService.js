@@ -14,8 +14,8 @@ class PaymentTerm {
 
   async addPaymentTerm(data) {
     try {
-      const {name, description} = data
-      const validatedData = {name, description}
+      const { name, description } = data
+      const validatedData = { name, description }
       const newPaymentTerm = await this.paymentTermRepository.addPaymentTerm(
         validatedData
       )
@@ -25,9 +25,8 @@ class PaymentTerm {
     }
   }
 
-  async removePaymentTerm(data) {
+  async removePaymentTerm(id) {
     try {
-      const {id} = data
       const removedPaymentTerm =
         await this.paymentTermRepository.removePaymentTerm(id)
       return removedPaymentTerm

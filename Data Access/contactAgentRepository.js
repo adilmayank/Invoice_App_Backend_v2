@@ -16,7 +16,7 @@ class ContactAgentRepository {
     try {
       const singleContactAgent = await this.contactAgentModel
         .findOne({ _id: agentId })
-        .lean()
+        console.log(singleContactAgent)
       if (!singleContactAgent) {
         return new Error("No contact agent found.")
       }

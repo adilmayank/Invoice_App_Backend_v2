@@ -19,9 +19,8 @@ class QuotationSummaryController {
   }
 
   getSingleQuotation = async (req, res) => {
-    const { id } = req.params
-
     try {
+      const { id } = req.params
       const singleQuotation =
         await this.quotationSummaryService.getSingleQuotation(id)
       res.formattedJson(
@@ -36,10 +35,10 @@ class QuotationSummaryController {
   }
 
   createQuotation = async (req, res) => {
-    const { data } = req.body
-
     try {
-      // some validations
+      const { data } = req.body
+      // controller level validation steps which will either return validated data or throw an error
+      // const validatedData = someValidationFunction(data)
       const newQuotation = await this.quotationSummaryService.createQuotation(
         data
       )
@@ -55,11 +54,10 @@ class QuotationSummaryController {
   }
 
   updateSingleQuotation = async (req, res) => {
-    const { id, data } = req.body
-
     try {
-      // some validation before sending data to service to process
-      // ...validation steps
+      const { id, data } = req.body
+      // controller level validation steps which will either return validated data or throw an error
+      // const validatedData = someValidationFunction(data)
       const updatedQuotation =
         await this.quotationSummaryService.updateSingleQuotation(id, data)
       res.formattedJson(
@@ -74,8 +72,8 @@ class QuotationSummaryController {
   }
 
   updateQuotationStatusDraft = async (req, res) => {
-    const { id } = req.params
     try {
+      const { id } = req.params
       const updatedQuotation =
         await this.quotationSummaryService.updateQuotationStatus(id, 'draft')
       res.formattedJson(
@@ -90,8 +88,8 @@ class QuotationSummaryController {
   }
 
   sendQuotation = async (req, res) => {
-    const { id } = req.params
     try {
+      const { id } = req.params
       const updatedQuotation = await this.quotationSummaryService.sendQuotation(
         id
       )
@@ -107,8 +105,8 @@ class QuotationSummaryController {
   }
 
   updateQuotationStatusAccepted = async (req, res) => {
-    const { id } = req.params
     try {
+      const { id } = req.params
       const updatedQuotation =
         await this.quotationSummaryService.updateQuotationStatus(id, 'accepted')
       res.formattedJson(
@@ -123,8 +121,8 @@ class QuotationSummaryController {
   }
 
   updateQuotationStatusRejected = async (req, res) => {
-    const { id } = req.params
     try {
+      const { id } = req.params
       const updatedQuotation =
         await this.quotationSummaryService.updateQuotationStatus(id, 'rejected')
       res.formattedJson(

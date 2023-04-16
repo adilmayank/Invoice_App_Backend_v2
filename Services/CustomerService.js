@@ -112,9 +112,8 @@ class Customer {
     }
   }
 
-  async addContactAgent(id, data) {
+  async addContactAgent(customerId, contactAgentId) {
     try {
-      const { contactAgentId } = data
       const isAgentIdValid = await this.checkIfContactAgentExist(contactAgentId)
       if (isAgentIdValid instanceof Error) {
         throw new Error(isAgentIdValid.message)
@@ -122,7 +121,7 @@ class Customer {
       const updatedCustomer =
         await this.customersRepository.addOrRemoveContactAgent(
           'add',
-          id,
+          customerId,
           contactAgentId
         )
       if (updatedCustomer instanceof Error) {
@@ -167,7 +166,6 @@ class Customer {
 
 const transformIncomingData = (incomingData) => {
   const transformedData = {}
-  console.log(incomingData)
 
   for (let field of customerInputFields) {
     if (incomingData.hasOwnProperty(field)) {

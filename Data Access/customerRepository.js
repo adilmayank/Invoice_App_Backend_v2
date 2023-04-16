@@ -60,7 +60,7 @@ class CustomerRepository {
     }
   }
 
-  async addOrRemoveContactAgent(operationType, customerId, agentId) {
+  async addOrRemoveContactAgent(operationType, customerId, contactAgentId) {
     let updatedCustomer
     try {
       if (operationType === 'add') {
@@ -68,7 +68,7 @@ class CustomerRepository {
           .findByIdAndUpdate(
             customerId,
             {
-              $addToSet: { contactAgents: agentId },
+              $addToSet: { contactAgents: contactAgentId },
             },
             { new: true }
           )
@@ -77,7 +77,7 @@ class CustomerRepository {
         updatedCustomer = await this.customerModel
           .findByIdAndUpdate(
             customerId,
-            { $pull: { contactAgents: agentId } },
+            { $pull: { contactAgents: contactAgentId } },
             { new: true }
           )
           .lean()

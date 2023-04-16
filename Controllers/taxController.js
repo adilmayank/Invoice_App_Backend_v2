@@ -13,9 +13,9 @@ class TaxController {
   }
 
   createTax = async (req, res) => {
-    const { data } = req.body
-
+    
     try {
+      const { data } = req.body
       const newTax = await this.taxService.createTax(data)
       res.formattedJson(null, true, 'Tax Created successfully', newTax)
     } catch (error) {
@@ -34,9 +34,9 @@ class TaxController {
   }
 
   removeTax = async (req, res) => {
-    const { id } = req.body.data
-
+    
     try {
+      const { id } = req.body
       const removedTax = await this.taxService.removeTax(id)
       res.formattedJson(null, true, 'Tax item removed successfully', removedTax)
     } catch (error) {

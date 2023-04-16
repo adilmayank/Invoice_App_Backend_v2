@@ -5,7 +5,8 @@ class ContactAgentController {
 
   getAllContactAgents = async (req, res) => {
     try {
-      const allContactAgents = await this.contactAgentService.getAllContactAgents()
+      const allContactAgents =
+        await this.contactAgentService.getAllContactAgents()
       res.formattedJson(
         null,
         true,
@@ -18,11 +19,12 @@ class ContactAgentController {
   }
 
   addContactAgent = async (req, res) => {
-    const { data } = req.body
-
     try {
+      const { data } = req.body
+      // some controller validation steps that return in a validated data or throws an error
+      const validatedData = { ...data }
       const newContactAgent = await this.contactAgentService.addContactAgent(
-        data
+        validatedData
       )
       res.formattedJson(
         null,
@@ -36,11 +38,12 @@ class ContactAgentController {
   }
 
   updateContactAgent = async (req, res) => {
-    const { id, data } = req.body
-
     try {
+      const { id, data } = req.body
+      // some controller validation steps that return in a validated data or throws an error
+      const validatedData = { ...data }
       const updatedContactAgent =
-        await this.contactAgentService.updateContactAgent(id, data)
+        await this.contactAgentService.updateContactAgent(id, validatedData)
 
       if (updatedContactAgent instanceof Error) {
         throw new Error(updatedContactAgent.message)
@@ -58,9 +61,8 @@ class ContactAgentController {
   }
 
   removeContactAgent = async (req, res) => {
-    const { id } = req.body
-
     try {
+      const { id } = req.body
       const removedContactAgent =
         await this.contactAgentService.removeContactAgent(id)
       if (removedContactAgent instanceof Error) {
