@@ -4,6 +4,7 @@ const { PaymentTerm } = require('./paymentTermService')
 const { Product } = require('./productService')
 const { QuotationSummary } = require('./quotationSummaryService')
 const { Tax } = require('./taxService')
+const { QuotationLineItem } = require('./quotationLineItemService')
 
 module.exports = {
   CustomerService: Customer,
@@ -12,4 +13,5 @@ module.exports = {
   ProductService: Product,
   QuotationSummaryService: QuotationSummary,
   TaxService: Tax,
+  QuotationLineItemService: QuotationLineItem,
 }

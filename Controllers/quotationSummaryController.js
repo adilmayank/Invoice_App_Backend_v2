@@ -3,16 +3,11 @@ class QuotationSummaryController {
     this.quotationSummaryService = quotationSummaryService
   }
 
-  getAllQuotationSummaries = async (req, res) => {
+  getAllQuotations = async (req, res) => {
     try {
-      const allQuotationSummaries =
-        await this.quotationSummaryService.getAllQuotationSummaries()
-      res.formattedJson(
-        null,
-        true,
-        'Fetched all quotation summaries',
-        allQuotationSummaries
-      )
+      const allQuotations =
+        await this.quotationSummaryService.getAllQuotations()
+      res.formattedJson(null, true, 'Fetched all quotations', allQuotations)
     } catch (error) {
       res.formattedJson(true, false, error.message, null)
     }
@@ -71,15 +66,25 @@ class QuotationSummaryController {
     }
   }
 
-  updateQuotationStatusDraft = async (req, res) => {
+  updateQuotationStatus = async (req, res) => {
     try {
       const { id } = req.params
-      const updatedQuotation =
-        await this.quotationSummaryService.updateQuotationStatus(id, 'draft')
+      const { status } = req.body.data
+      let updatedQuotation
+      if (status === 'draft') {
+        updatedQuotation =
+          await this.quotationSummaryService.updateQuotationStatusDraft(id)
+      } else if (status === 'accepted') {
+        updatedQuotation =
+          await this.quotationSummaryService.updateQuotationStatusAccepted(id)
+      } else if (status === 'rejected') {
+        updatedQuotation =
+          await this.quotationSummaryService.updateQuotationStatusRejected(id)
+      }
       res.formattedJson(
         null,
         true,
-        'Quotation status marked as draft',
+        `Quotation status marked as ${status}`,
         updatedQuotation
       )
     } catch (error) {
@@ -97,38 +102,6 @@ class QuotationSummaryController {
         null,
         true,
         'Quotation successfully sent',
-        updatedQuotation
-      )
-    } catch (error) {
-      res.formattedJson(true, false, error.message, null)
-    }
-  }
-
-  updateQuotationStatusAccepted = async (req, res) => {
-    try {
-      const { id } = req.params
-      const updatedQuotation =
-        await this.quotationSummaryService.updateQuotationStatus(id, 'accepted')
-      res.formattedJson(
-        null,
-        true,
-        'Quotation status marked as accepted',
-        updatedQuotation
-      )
-    } catch (error) {
-      res.formattedJson(true, false, error.message, null)
-    }
-  }
-
-  updateQuotationStatusRejected = async (req, res) => {
-    try {
-      const { id } = req.params
-      const updatedQuotation =
-        await this.quotationSummaryService.updateQuotationStatus(id, 'rejected')
-      res.formattedJson(
-        null,
-        true,
-        'Quotation status marked as rejected',
         updatedQuotation
       )
     } catch (error) {

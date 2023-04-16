@@ -4,6 +4,7 @@ const { PaymentTermRepository } = require('./paymentTermRepository')
 const { ProductRepository } = require('./productRepository')
 const { QuotationSummaryRepository } = require('./quotationSummaryRepository')
 const { TaxRepository } = require('./taxRepository')
+const { QuotationLineItemRepository } = require('./quotationLineItemRepository')
 
 module.exports = {
   CustomerRepository,
@@ -11,5 +12,6 @@ module.exports = {
   PaymentTermRepository,
   ProductRepository,
   QuotationSummaryRepository,
+  QuotationLineItemRepository,
   TaxRepository,
 }

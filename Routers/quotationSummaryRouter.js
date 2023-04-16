@@ -2,25 +2,36 @@ const express = require('express')
 const router = express.Router()
 const { QuotationSummaryController } = require('../Controllers')
 const { QuotationSummaryService } = require('../Services')
-const { QuotationSummaryRepository } = require('../Data Access')
-const { QuotationSummaryModel } = require('../Models')
+const {
+  QuotationSummaryRepository,
+  QuotationLineItemRepository,
+  ProductRepository,
+} = require('../Data Access')
+const {
+  QuotationSummaryModel,
+  QuotationLineItemModel,
+  ProductModel,
+} = require('../Models')
 
 // Dependency injection
 const quotationSummaryRepository = new QuotationSummaryRepository(
   QuotationSummaryModel
 )
+const quotationLineItemRepository = new QuotationLineItemRepository(
+  QuotationLineItemModel
+)
+const productRepository = new ProductRepository(ProductModel)
 const quotationSummaryService = new QuotationSummaryService(
-  quotationSummaryRepository
+  quotationSummaryRepository,
+  quotationLineItemRepository,
+  productRepository
 )
 const quotationSummaryController = new QuotationSummaryController(
   quotationSummaryService
 )
 
 // get all quotations
-router.get(
-  '/api/v2/quotations',
-  quotationSummaryController.getAllQuotationSummaries
-)
+router.get('/api/v2/quotations', quotationSummaryController.getAllQuotations)
 
 // get single quotation
 router.get(
@@ -37,22 +48,10 @@ router.patch(
   quotationSummaryController.updateSingleQuotation
 )
 
-// update quotation status as draft
+// update quotation status
 router.patch(
-  '/api/v2/quotations/:id/status/draft',
-  quotationSummaryController.updateQuotationStatusDraft
-)
-
-// update quotation status as accepted
-router.patch(
-  '/api/v2/quotations/:id/status/accepted',
-  quotationSummaryController.updateQuotationStatusAccepted
-)
-
-// update quotation status as Reject
-router.patch(
-  '/api/v2/quotations/:id/status/rejected',
-  quotationSummaryController.updateQuotationStatusRejected
+  '/api/v2/quotations/:id/status',
+  quotationSummaryController.updateQuotationStatus
 )
 
 // send quotation

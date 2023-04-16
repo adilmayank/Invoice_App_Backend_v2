@@ -26,6 +26,22 @@ class ProductRepository {
     }
   }
 
+  async getFilteredProducts(filterOptions) {
+    try {
+      const filterField = filterOptions.name
+      const filterFieldValues = filterOptions.values
+      const filteredProducts = await this.productModel
+        .find(
+          { [filterField]: { $in: filterFieldValues } },
+          'code description unitPrice '
+        )
+        .lean()
+      return filteredProducts
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
+
   async addProduct(data) {
     const { code, description, unitPrice } = data
     try {
@@ -69,7 +85,6 @@ class ProductRepository {
   }
 
   async activateOrDeactivateProduct(productId, operationType) {
-
     let updatedProduct
     try {
       if (operationType === 'activate') {
