@@ -32,10 +32,13 @@ class QuotationSummaryController {
   createQuotation = async (req, res) => {
     try {
       const { data } = req.body
+      const { quotationData, lineItemData } = data
+
       // controller level validation steps which will either return validated data or throw an error
       // const validatedData = someValidationFunction(data)
       const newQuotation = await this.quotationSummaryService.createQuotation(
-        data
+        quotationData,
+        lineItemData
       )
       res.formattedJson(
         null,
@@ -50,11 +53,15 @@ class QuotationSummaryController {
 
   updateSingleQuotation = async (req, res) => {
     try {
-      const { id, data } = req.body
+      const { quotationId, data } = req.body
+      const {
+        lineItemData: { itemsToAdd, itemsToRemove, itemsToUpdate },
+        quotationData,
+      } = data
       // controller level validation steps which will either return validated data or throw an error
       // const validatedData = someValidationFunction(data)
       const updatedQuotation =
-        await this.quotationSummaryService.updateSingleQuotation(id, data)
+        await this.quotationSummaryService.updateSingleQuotation(quotationId, quotationData, itemsToAdd, itemsToRemove, itemsToUpdate)
       res.formattedJson(
         null,
         true,
