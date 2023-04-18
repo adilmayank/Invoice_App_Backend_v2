@@ -27,15 +27,32 @@ class QuotationLineItemRepository {
       const removedLineItems = await this.quotationLineItemModel.deleteMany({
         _id: { $in: lineItemsIdArray },
       })
-      console.log(removedLineItems)
       return removedLineItems
     } catch (error) {
       throw new Error(error.message)
     }
   }
 
-  async updateLineItems(updateOperation) {
+  async updateLineItems(lineItemsArray) {
     try {
+      const updateOperation = lineItemsArray.map((lineItem) => {
+        const lineItemId = lineItem.lineItemId
+        const dataToUpdate = lineItem.dataToUpdate
+        return {
+          updateOne: {
+            filter: {
+              _id: lineItemId,
+            },
+            update: {
+              $set: {
+                unitPrice: dataToUpdate.unitPrice,
+                quantity: dataToUpdate.quantity,
+                total: dataToUpdate.quantity * dataToUpdate.unitPrice,
+              },
+            },
+          },
+        }
+      })
       const updatedLineItems = await this.quotationLineItemModel.bulkWrite(
         updateOperation
       )
