@@ -37,49 +37,50 @@ class QuotationSummary {
     }
   }
 
-  async createQuotation(data) {
+  async createQuotation(quotationData, lineItemData) {
     try {
-      const { quotationData, lineItemData } = data
       const newQuotation =
         await this.quotationSummaryRepository.createQuotation(quotationData)
 
-      // at this point quotation is created
       const quotationId = newQuotation._id.toString()
 
       await this.addProductsToQuotationLineItem(quotationId, lineItemData)
 
-      return quotationId
+      const createdQuotation = await this.getSingleQuotation(quotationId)
+
+      return createdQuotation
     } catch (error) {
       throw new Error(error.message)
     }
   }
 
-  async updateSingleQuotation(quotationId, data) {
+  async updateSingleQuotation(
+    quotationId,
+    quotationData,
+    itemsToAdd = null,
+    itemsToRemove = null,
+    itemsToUpdate = null
+  ) {
     try {
-      const {
-        productsToAdd,
-        productsToRemove,
-        productsToUpdate,
-        dataToUpdate,
-      } = data
-      if (productsToRemove) {
-        await this.removeProductsFromQuotationLineItem(productsToRemove)
-      }
-      if (productsToUpdate) {
-        await this.updateProductsInQuotationLineItem(productsToUpdate)
-      }
-      if (productsToAdd) {
-        await this.addProductsToQuotationLineItem(quotationId, productsToAdd)
-      }
-
       const updatedQuotation =
         await this.quotationSummaryRepository.updateSingleQuotation(
           quotationId,
-          dataToUpdate
+          quotationData
         )
       if (updatedQuotation === null) {
         throw new Error('No record found with this quotation id.')
       }
+
+      if (itemsToRemove) {
+        await this.removeProductsFromQuotationLineItem(itemsToRemove)
+      }
+      if (itemsToUpdate) {
+        await this.updateProductsInQuotationLineItem(itemsToUpdate)
+      }
+      if (itemsToAdd) {
+        await this.addProductsToQuotationLineItem(quotationId, itemsToAdd)
+      }
+
       return updatedQuotation
     } catch (error) {
       throw new Error(error.message)
@@ -154,71 +155,16 @@ class QuotationSummary {
 
   async addProductsToQuotationLineItem(quotationId, lineItemData) {
     try {
-      const productsToInsert = await this.getProductsToInsert(lineItemData)
-      // return null
-      // if lineItemData is present, then add then to the quotation line collection
-      if (lineItemData) {
-        const lineItems = await this.quotationLineItemRepository.addLineItems(
-          updatedLineItemData
-        )
-      }
-    } catch (error) {
-      throw new Error(error.message)
-    }
-  }
-
-  async removeProductsFromQuotationLineItem(productsToRemove) {
-    try {
-      await this.quotationLineItemRepository.removeLineItems(productsToRemove)
-    } catch (error) {
-      throw new Error(error.message)
-    }
-  }
-
-  async updateProductsInQuotationLineItem(productsToUpdate) {
-    try {
-      const productsToInsert = await this.getProductsToInsert(productsToUpdate)
-      console.log(productsToInsert)
-      const updateOperation = productsToInsert.map((lineItem) => {
-        return {
-          updateOne: {
-            filter: {
-              _id: lineItem.lineItemId,
-            },
-            update: {
-              $set: {
-                unitPrice: lineItem.unitPrice,
-                quantity: lineItem.quantity,
-                total: lineItem.total,
-              },
-            },
-          },
-        }
-      })
-
-      await this.quotationLineItemRepository.updateLineItems(updateOperation)
-    } catch (error) {
-      throw new Error(error.message)
-    }
-  }
-
-  async getProductsToInsert(lineItemData) {
-    try {
       const productIds = lineItemData.map((lineItem) => {
         return lineItem.productId
       })
-      const filterOptions = { name: '_id', values: productIds }
-      const productsData = await this.productRepository.getFilteredProducts(
-        filterOptions
-      )
+      const productsData = await this.getProductsToInsert(productIds)
       // adding quotationId and total to each object in the array
       const updatedLineItemData = lineItemData.map((lineItem) => {
         productsData.map((productItem) => {
           const pId = productItem._id.toString()
           if (pId === lineItem.productId) {
-            if (lineItem.quotationId) {
-              lineItem.quotationId = quotationId
-            }
+            lineItem.quotationId = quotationId
             lineItem.code = productItem.code
             lineItem.description = productItem.description
             lineItem.unitPrice = productItem.unitPrice
@@ -227,7 +173,45 @@ class QuotationSummary {
         })
         return lineItem
       })
-      return updatedLineItemData
+
+      if (!updatedLineItemData) {
+        // remove quotation
+        throw new Error('Line Items Could not be generated')
+      }
+      await this.quotationLineItemRepository.addLineItems(updatedLineItemData)
+
+      return true
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
+
+  async removeProductsFromQuotationLineItem(productsToRemove) {
+    try {
+      const lineItemIds = [...productsToRemove]
+      const removedLineItems = await this.quotationLineItemRepository.removeLineItems(lineItemIds)
+      const message = `${removedLineItems.deleteCount} records deleted.`
+      return message
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
+
+  async updateProductsInQuotationLineItem(productsToUpdate) {
+    try {
+      await this.quotationLineItemRepository.updateLineItems(productsToUpdate)
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
+
+  async getProductsToInsert(productIds) {
+    try {
+      const filterOptions = { name: '_id', values: productIds }
+      const productsData = await this.productRepository.getFilteredProducts(
+        filterOptions
+      )
+      return productsData
     } catch (error) {
       throw new Error(error.message)
     }
