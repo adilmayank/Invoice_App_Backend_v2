@@ -11,20 +11,20 @@ const contactAgentService = new ContactAgentService(contactAgentRepository)
 const contactAgentController = new ContactAgentController(contactAgentService)
 
 // get all contact agent
-router.get('/api/v2/contact-agents', contactAgentController.getAllContactAgents)
+router.get('/api/v2/contactAgents', contactAgentController.getAllContactAgents)
 
 // create new contact agent
-router.post('/api/v2/contact-agents', contactAgentController.addContactAgent)
+router.post('/api/v2/contactAgents', contactAgentController.addContactAgent)
 
 // update single contact agent
 router.patch(
-  '/api/v2/contact-agents',
+  '/api/v2/contactAgents/:contactAgentId',
   contactAgentController.updateContactAgent
 )
 
 // hard delete contact agent
 router.delete(
-  '/api/v2/contact-agents',
+  '/api/v2/contactAgents/:contactAgentId',
   contactAgentController.removeContactAgent
 )
 

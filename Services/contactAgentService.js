@@ -6,10 +6,10 @@ class ContactAgent {
   // data validation logic here
   validation(type) {}
 
-  async getSingleContactAgent(agentId) {
+  async getSingleContactAgent(contactAgentId) {
     try {
       const singleContactAgent =
-        await this.contactAgentRepository.getSingleContactAgent(agentId)
+        await this.contactAgentRepository.getSingleContactAgent(contactAgentId)
       return singleContactAgent
     } catch (error) {
       throw new Error(error.message)
@@ -37,20 +37,20 @@ class ContactAgent {
     }
   }
 
-  async updateContactAgent(id, data) {
+  async updateContactAgent(contactAgentId, data) {
     try {
       const udpatedContactAgent =
-        await this.contactAgentRepository.updateContactAgent(id, data)
+        await this.contactAgentRepository.updateContactAgent(contactAgentId, data)
       return udpatedContactAgent
     } catch (error) {
       throw new Error(error.message)
     }
   }
 
-  async removeContactAgent(id) {
+  async removeContactAgent(contactAgentId) {
     try {
       const removedContactAgent =
-        await this.contactAgentRepository.removeContactAgent(id)
+        await this.contactAgentRepository.removeContactAgent(contactAgentId)
       return removedContactAgent
     } catch (error) {
       throw new Error(error.message)

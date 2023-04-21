@@ -53,10 +53,10 @@ class ContactAgentRepository {
     }
   }
 
-  async removeContactAgent(id) {
+  async removeContactAgent(contactAgentId) {
     try {
       const removedContactAgent =
-        await this.contactAgentModel.findByIdAndRemove(id)
+        await this.contactAgentModel.findByIdAndRemove(contactAgentId)
       if (removedContactAgent === null) {
         return new Error('No record found with the provided id.')
       }
