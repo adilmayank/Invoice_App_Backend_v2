@@ -15,9 +15,9 @@ class QuotationSummaryController {
 
   getSingleQuotation = async (req, res) => {
     try {
-      const { id } = req.params
+      const { quotationId } = req.params
       const singleQuotation =
-        await this.quotationSummaryService.getSingleQuotation(id)
+        await this.quotationSummaryService.getSingleQuotation(quotationId)
       res.formattedJson(
         null,
         true,
@@ -31,7 +31,7 @@ class QuotationSummaryController {
 
   createQuotation = async (req, res) => {
     try {
-      const { data } = req.body
+      const data = req.body
       const { quotationData, lineItemData } = data
 
       // controller level validation steps which will either return validated data or throw an error
@@ -53,15 +53,23 @@ class QuotationSummaryController {
 
   updateSingleQuotation = async (req, res) => {
     try {
-      const { quotationId, data } = req.body
+      const { quotationId } = req.params
+      const data = req.body
       const {
-        lineItemData: { itemsToAdd, itemsToRemove, itemsToUpdate },
+        lineItemData: { toAdd, toRemove, toUpdate },
         quotationData,
       } = data
+
       // controller level validation steps which will either return validated data or throw an error
       // const validatedData = someValidationFunction(data)
       const updatedQuotation =
-        await this.quotationSummaryService.updateSingleQuotation(quotationId, quotationData, itemsToAdd, itemsToRemove, itemsToUpdate)
+        await this.quotationSummaryService.updateSingleQuotation(
+          quotationId,
+          quotationData,
+          toAdd,
+          toRemove,
+          toUpdate
+        )
       res.formattedJson(
         null,
         true,
@@ -75,18 +83,18 @@ class QuotationSummaryController {
 
   updateQuotationStatus = async (req, res) => {
     try {
-      const { id } = req.params
-      const { status } = req.body.data
+      const { quotationId } = req.params
+      const { status } = req.body
       let updatedQuotation
       if (status === 'draft') {
         updatedQuotation =
-          await this.quotationSummaryService.updateQuotationStatusDraft(id)
+          await this.quotationSummaryService.updateQuotationStatusDraft(quotationId)
       } else if (status === 'accepted') {
         updatedQuotation =
-          await this.quotationSummaryService.updateQuotationStatusAccepted(id)
+          await this.quotationSummaryService.updateQuotationStatusAccepted(quotationId)
       } else if (status === 'rejected') {
         updatedQuotation =
-          await this.quotationSummaryService.updateQuotationStatusRejected(id)
+          await this.quotationSummaryService.updateQuotationStatusRejected(quotationId)
       }
       res.formattedJson(
         null,
@@ -101,9 +109,9 @@ class QuotationSummaryController {
 
   sendQuotation = async (req, res) => {
     try {
-      const { id } = req.params
+      const { quotationId } = req.params
       const updatedQuotation = await this.quotationSummaryService.sendQuotation(
-        id
+        quotationId
       )
       res.formattedJson(
         null,

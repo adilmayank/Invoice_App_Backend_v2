@@ -71,13 +71,13 @@ class QuotationSummary {
         throw new Error('No record found with this quotation id.')
       }
 
-      if (itemsToRemove) {
+      if (itemsToRemove.length > 0) {
         await this.removeProductsFromQuotationLineItem(itemsToRemove)
       }
-      if (itemsToUpdate) {
+      if (itemsToUpdate.length > 0) {
         await this.updateProductsInQuotationLineItem(itemsToUpdate)
       }
-      if (itemsToAdd) {
+      if (itemsToAdd.length > 0) {
         await this.addProductsToQuotationLineItem(quotationId, itemsToAdd)
       }
 
@@ -89,10 +89,11 @@ class QuotationSummary {
 
   async updateQuotationStatusDraft(quotationId) {
     try {
+      const statusObject = { status: 'draft' }
       const updatedQuotation =
-        await this.quotationSummaryRepository.updateQuotationStatus(
+        await this.quotationSummaryRepository.updateSingleQuotation(
           quotationId,
-          'draft'
+          statusObject
         )
       return updatedQuotation
     } catch (error) {
@@ -102,10 +103,11 @@ class QuotationSummary {
 
   async updateQuotationStatusAccepted(quotationId) {
     try {
+      const statusObject = { status: 'accepted' }
       const updatedQuotation =
-        await this.quotationSummaryRepository.updateQuotationStatus(
+        await this.quotationSummaryRepository.updateSingleQuotation(
           quotationId,
-          'accepted'
+          statusObject
         )
       return updatedQuotation
     } catch (error) {
@@ -115,10 +117,11 @@ class QuotationSummary {
 
   async updateQuotationStatusRejected(quotationId) {
     try {
+      const statusObject = { status: 'rejected' }
       const updatedQuotation =
-        await this.quotationSummaryRepository.updateQuotationStatus(
+        await this.quotationSummaryRepository.updateSingleQuotation(
           quotationId,
-          'rejected'
+          statusObject
         )
       return updatedQuotation
     } catch (error) {
@@ -128,10 +131,11 @@ class QuotationSummary {
 
   async updateQuotationStatusSent(quotationId) {
     try {
+      const statusObject = { status: 'sent' }
       const updatedQuotation =
-        await this.quotationSummaryRepository.updateQuotationStatus(
+        await this.quotationSummaryRepository.updateSingleQuotation(
           quotationId,
-          'sent'
+          statusObject
         )
       return updatedQuotation
     } catch (error) {
@@ -189,7 +193,8 @@ class QuotationSummary {
   async removeProductsFromQuotationLineItem(productsToRemove) {
     try {
       const lineItemIds = [...productsToRemove]
-      const removedLineItems = await this.quotationLineItemRepository.removeLineItems(lineItemIds)
+      const removedLineItems =
+        await this.quotationLineItemRepository.removeLineItems(lineItemIds)
       const message = `${removedLineItems.deleteCount} records deleted.`
       return message
     } catch (error) {

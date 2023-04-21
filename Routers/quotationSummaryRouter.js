@@ -35,7 +35,7 @@ router.get('/api/v2/quotations', quotationSummaryController.getAllQuotations)
 
 // get single quotation
 router.get(
-  '/api/v2/quotations/:id',
+  '/api/v2/quotations/:quotationId',
   quotationSummaryController.getSingleQuotation
 )
 
@@ -44,19 +44,19 @@ router.post('/api/v2/quotations', quotationSummaryController.createQuotation)
 
 // update single quotation
 router.patch(
-  '/api/v2/quotations',
+  '/api/v2/quotations/:quotationId',
   quotationSummaryController.updateSingleQuotation
 )
 
 // update quotation status
 router.patch(
-  '/api/v2/quotations/:id/status',
+  '/api/v2/quotations/:quotationId/status',
   quotationSummaryController.updateQuotationStatus
 )
 
 // send quotation
 router.patch(
-  '/api/v2/quotations/:id/send',
+  '/api/v2/quotations/:quotationId/send',
   quotationSummaryController.sendQuotation
 )
 

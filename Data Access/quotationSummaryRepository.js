@@ -5,9 +5,7 @@ class QuotationSummaryRepository {
 
   async getAllQuotations() {
     try {
-      const allQuotations = await this.quotationSummaryModel
-        .find({})
-        .lean()
+      const allQuotations = await this.quotationSummaryModel.find({}).lean()
       return allQuotations
     } catch (error) {
       throw new Error(error.message)
@@ -20,7 +18,7 @@ class QuotationSummaryRepository {
         .findById(quotationId)
         .populate({ path: 'customerId', select: '-_id' })
         .populate({ path: 'tax', select: 'name rate -_id' })
-        .populate({path:"products"})
+        .populate({ path: 'products' })
         .lean()
       return singleQuotation
     } catch (error) {
