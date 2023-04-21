@@ -12,12 +12,13 @@ class ContactAgentRepository {
     }
   }
 
-  async getSingleContactAgent(agentId) {
+  async getSingleContactAgent(contactAgentId) {
     try {
-      const singleContactAgent = await this.contactAgentModel
-        .findOne({ _id: agentId })
+      const singleContactAgent = await this.contactAgentModel.findOne({
+        _id: contactAgentId,
+      })
       if (!singleContactAgent) {
-        return new Error("No contact agent found.")
+        return new Error('No contact agent found.')
       }
       return singleContactAgent
     } catch (error) {
@@ -39,10 +40,10 @@ class ContactAgentRepository {
     }
   }
 
-  async updateContactAgent(id, data) {
+  async updateContactAgent(contactAgentId, data) {
     try {
       const updatedContactAgent =
-        await this.contactAgentModel.findByIdAndUpdate(id, data, { new: true })
+        await this.contactAgentModel.findByIdAndUpdate(contactAgentId, data, { new: true })
       if (updatedContactAgent === null) {
         return new Error('No record found with the provided id.')
       }

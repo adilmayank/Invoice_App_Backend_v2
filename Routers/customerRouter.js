@@ -9,7 +9,10 @@ const { CustomerModel, ContactAgentModel } = require('../Models')
 const customerRepository = new CustomerRepository(CustomerModel)
 const contactAgentRepository = new ContactAgentRepository(ContactAgentModel)
 
-const customerService = new CustomerService(customerRepository, contactAgentRepository)
+const customerService = new CustomerService(
+  customerRepository,
+  contactAgentRepository
+)
 const customerController = new CustomerController(customerService)
 
 // get all customer
@@ -19,21 +22,39 @@ router.get('/api/v2/customers', customerController.getAllCustomers)
 router.post('/api/v2/customers', customerController.createNewCustomer)
 
 // get single customer
-router.get('/api/v2/customers/:id', customerController.getSingleCustomer)
+router.get(
+  '/api/v2/customers/:customerId',
+  customerController.getSingleCustomer
+)
 
 // update single customer
-router.patch('/api/v2/customers', customerController.updateSingleCustomer)
+router.patch(
+  '/api/v2/customers/:customerId',
+  customerController.updateSingleCustomer
+)
 
 // add a contact agent for a customer
-router.patch('/api/v2/customers/:id/contact-agents', customerController.addContactAgent)
+router.patch(
+  '/api/v2/customers/:customerId/contactAgents',
+  customerController.addContactAgent
+)
 
 // remove a contact agent for a customer
-router.patch('/api/v2/customers/:id/contact-agents/:agentId', customerController.removeContactAgent)
+router.patch(
+  '/api/v2/customers/:customerId/contactAgents/:contactAgentId',
+  customerController.removeContactAgent
+)
 
 // change isActive Flag
 router.patch(
-  '/api/v2/customers/change-activation-status',
-  customerController.updateActivatedStatus
+  '/api/v2/customers/:customerId/activateCustomer',
+  customerController.activateCustomer
+)
+
+// change isActive Flag
+router.patch(
+  '/api/v2/customers/:customerId/deactivateCustomer',
+  customerController.deactivateCustomer
 )
 
 module.exports = router

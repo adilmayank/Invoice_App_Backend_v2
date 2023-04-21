@@ -1,5 +1,3 @@
-const { customerInputFields } = require('../Utils/InputFields')
-
 class Customer {
   constructor(customersRepository, contactAgentsRepository = null) {
     this.customersRepository = customersRepository
@@ -51,12 +49,12 @@ class Customer {
     }
   }
 
-  async getSingleCustomer(id) {
+  async getSingleCustomer(customerId) {
     try {
       const customerRecord =
         await this.customersRepository.getSingleCustomerByProperty({
           property: '_id',
-          value: id,
+          value: customerId,
         })
       return customerRecord
     } catch (error) {
@@ -64,14 +62,11 @@ class Customer {
     }
   }
 
-  async updateCustomer(id, data) {
-    const transformedData = transformIncomingData(data)
-
+  async updateCustomer(customerId, data) {
     try {
-      const validatedData = this.validation.call(transformedData, 'update')
       const updatedCustomer = await this.customersRepository.updateCustomer(
-        id,
-        validatedData
+        customerId,
+        data
       )
       return updatedCustomer
     } catch (error) {
@@ -79,11 +74,11 @@ class Customer {
     }
   }
 
-  async updateActivatedStatus(id, isActiveStatus) {
+  async updateActivatedStatus(customerId, isActiveStatus) {
     try {
       const updatedCustomer =
         await this.customersRepository.updateActivationStatus(
-          id,
+          customerId,
           isActiveStatus
         )
       return updatedCustomer
@@ -93,18 +88,12 @@ class Customer {
   }
 
   async createNewCustomer(data) {
-    const transformedData = transformIncomingData(data)
-    for (let field of customerInputFields) {
-      this[field] = transformedData[field]
-    }
     try {
       if (this.contactAgentsRepository) {
         // create contact agent and get its _id
       }
-
-      const validatedData = this.validation.call(transformedData, 'create')
       const newCustomerData = await this.customersRepository.createNewCustomer(
-        validatedData
+        data
       )
       return newCustomerData
     } catch (error) {
@@ -132,17 +121,17 @@ class Customer {
     }
   }
 
-  async removeContactAgent(id, agentId) {
+  async removeContactAgent(customerId, contactAgentId) {
     try {
-      const isAgentIdValid = await this.checkIfContactAgentExist(agentId)
+      const isAgentIdValid = await this.checkIfContactAgentExist(contactAgentId)
       if (isAgentIdValid instanceof Error) {
         throw new Error(isAgentIdValid.message)
       }
       const updatedCustomer =
         await this.customersRepository.addOrRemoveContactAgent(
           'remove',
-          id,
-          agentId
+          customerId,
+          contactAgentId
         )
       if (updatedCustomer instanceof Error) {
         throw new Error(updatedCustomer.message)
@@ -152,28 +141,16 @@ class Customer {
     }
   }
 
-  async checkIfContactAgentExist(agentId) {
+  async checkIfContactAgentExist(contactAgentId) {
     try {
       const contactAgentDetail =
-        await this.contactAgentsRepository.getSingleContactAgent(agentId)
+        await this.contactAgentsRepository.getSingleContactAgent(contactAgentId)
       if (contactAgentDetail instanceof Error) {
         return new Error(contactAgentDetail.message)
       }
       return true
     } catch (error) {}
   }
-}
-
-const transformIncomingData = (incomingData) => {
-  const transformedData = {}
-
-  for (let field of customerInputFields) {
-    if (incomingData.hasOwnProperty(field)) {
-      transformedData[field] = incomingData[field]
-    }
-  }
-
-  return transformedData
 }
 
 module.exports = { Customer }

@@ -38,10 +38,10 @@ class CustomerRepository {
     }
   }
 
-  async updateCustomer(id, data) {
+  async updateCustomer(customerId, data) {
     try {
       const updatedCustomer = await this.customerModel
-        .findByIdAndUpdate(id, { ...data }, { new: true })
+        .findByIdAndUpdate(customerId, { ...data }, { new: true })
         .lean()
       return updatedCustomer
     } catch (error) {
@@ -49,10 +49,14 @@ class CustomerRepository {
     }
   }
 
-  async updateActivationStatus(id, isActiveStatus) {
+  async updateActivationStatus(customerId, isActiveStatus) {
     try {
       const updateCustomer = await this.customerModel
-        .findByIdAndUpdate(id, { isActive: isActiveStatus }, { new: true })
+        .findByIdAndUpdate(
+          customerId,
+          { isActive: isActiveStatus },
+          { new: true }
+        )
         .lean()
       return updateCustomer
     } catch (error) {
