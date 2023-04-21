@@ -17,9 +17,9 @@ router.get('/api/v2/taxes', taxController.getAllTaxes)
 router.post('/api/v2/taxes', taxController.createTax)
 
 // update tax
-router.patch('/api/v2/taxes', taxController.updateTax)
+router.patch('/api/v2/taxes/:taxId', taxController.updateTax)
 
 // hard delete single tax
-router.delete('/api/v2/taxes', taxController.removeTax)
+router.delete('/api/v2/taxes/:taxId', taxController.removeTax)
 
 module.exports = router

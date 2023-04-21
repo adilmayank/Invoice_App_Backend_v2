@@ -13,10 +13,11 @@ class TaxController {
   }
 
   createTax = async (req, res) => {
-    
     try {
-      const { data } = req.body
-      const newTax = await this.taxService.createTax(data)
+      const { name, rate } = req.body
+      // some validation
+      const validatedData = { name, rate }
+      const newTax = await this.taxService.createTax(validatedData)
       res.formattedJson(null, true, 'Tax Created successfully', newTax)
     } catch (error) {
       res.formattedJson(true, false, error.message, null)
@@ -25,8 +26,11 @@ class TaxController {
 
   updateTax = async (req, res) => {
     try {
-      const { id, data } = req.body
-      const updatedTax = await this.taxService.updateTax(id, data)
+      const { taxId } = req.params
+      const { name, rate } = req.body
+      // some validation
+      const validatedData = { name, rate }
+      const updatedTax = await this.taxService.updateTax(taxId, validatedData)
       res.formattedJson(null, true, 'Tax updated successfully', updatedTax)
     } catch (error) {
       res.formattedJson(true, false, error.message, null)
@@ -34,10 +38,9 @@ class TaxController {
   }
 
   removeTax = async (req, res) => {
-    
     try {
-      const { id } = req.body
-      const removedTax = await this.taxService.removeTax(id)
+      const { taxId } = req.params
+      const removedTax = await this.taxService.removeTax(taxId)
       res.formattedJson(null, true, 'Tax item removed successfully', removedTax)
     } catch (error) {
       res.formattedJson(true, false, error.message, null)

@@ -25,11 +25,11 @@ class TaxRepository {
     }
   }
 
-  async updateTax(id, data) {
+  async updateTax(taxId, data) {
     const { name, rate } = data
     try {
       const updatedTax = await this.taxModel
-        .findByIdAndUpdate(id, { name, rate }, { new: true })
+        .findByIdAndUpdate(taxId, { name, rate }, { new: true })
         .lean()
       return updatedTax
     } catch (error) {
@@ -37,9 +37,9 @@ class TaxRepository {
     }
   }
 
-  async removeTax(id) {
+  async removeTax(taxId) {
     try {
-      const removedTax = await this.taxModel.findByIdAndRemove(id)
+      const removedTax = await this.taxModel.findByIdAndRemove(taxId)
       if (removedTax === null) {
         return new Error('No record found with the provided id.')
       }

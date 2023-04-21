@@ -25,12 +25,12 @@ class Tax {
     }
   }
 
-  async updateTax(id, taxUpdationData) {
+  async updateTax(taxId, taxUpdationData) {
     try {
       const {name, rate} = taxUpdationData
       const validatedData = {name, rate} // later this data will be validated according to some business rule
       const updatedTax = await this.taxRepository.updateTax(
-        id, validatedData
+        taxId, validatedData
       )
       return updatedTax
     } catch (error) {
@@ -38,10 +38,10 @@ class Tax {
     }
   }
 
-  async removeTax(id) {
+  async removeTax(taxId) {
     try {
       const removedTax =
-        await this.taxRepository.removeTax(id)
+        await this.taxRepository.removeTax(taxId)
       return removedTax
     } catch (error) {
       throw new Error(error.message)
