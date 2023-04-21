@@ -19,9 +19,9 @@ class PaymentTermController {
 
   addPaymentTerm = async (req, res) => {
     try {
-      const { data } = req.body
+      const { name, description } = req.body
       // some controller validation step that return validated data or throws an error
-      const validatedData = { ...data }
+      const validatedData = { name, description }
       const newPaymentTerm = await this.paymentTermService.addPaymentTerm(
         validatedData
       )
@@ -37,11 +37,10 @@ class PaymentTermController {
   }
 
   removePaymentTerm = async (req, res) => {
-    
     try {
-      const { id } = req.body
+      const { paymentTermId } = req.params
       const removedPaymentTerm =
-        await this.paymentTermService.removePaymentTerm(id)
+        await this.paymentTermService.removePaymentTerm(paymentTermId)
       if (removedPaymentTerm instanceof Error) {
         throw new Error(removedPaymentTerm.message)
       } else {

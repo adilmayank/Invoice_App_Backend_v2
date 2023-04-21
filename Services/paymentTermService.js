@@ -25,10 +25,10 @@ class PaymentTerm {
     }
   }
 
-  async removePaymentTerm(id) {
+  async removePaymentTerm(paymentTermId) {
     try {
       const removedPaymentTerm =
-        await this.paymentTermRepository.removePaymentTerm(id)
+        await this.paymentTermRepository.removePaymentTerm(paymentTermId)
       return removedPaymentTerm
     } catch (error) {
       throw new Error(error.message)

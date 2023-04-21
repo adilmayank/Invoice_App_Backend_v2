@@ -25,10 +25,10 @@ class PaymentTermRepository {
     }
   }
 
-  async removePaymentTerm(id) {
+  async removePaymentTerm(paymentTermId) {
     try {
       const removedPaymentTerm = await this.paymentTermModel.findByIdAndRemove(
-        id
+        paymentTermId
       )
       if (removedPaymentTerm === null) {
         return new Error('No record found with the provided id.')

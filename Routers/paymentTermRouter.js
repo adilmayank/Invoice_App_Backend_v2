@@ -11,12 +11,12 @@ const paymentTermService = new PaymentTermService(paymentTermRepository)
 const paymentTermController = new PaymentTermController(paymentTermService)
 
 // get all payment terms
-router.get('/api/v2/payment-terms', paymentTermController.getAllPaymentTerms)
+router.get('/api/v2/paymentTerms', paymentTermController.getAllPaymentTerms)
 
 // create new payment term
-router.post('/api/v2/payment-terms', paymentTermController.addPaymentTerm)
+router.post('/api/v2/paymentTerms', paymentTermController.addPaymentTerm)
 
 // hard delete single payment term
-router.delete('/api/v2/payment-terms', paymentTermController.removePaymentTerm)
+router.delete('/api/v2/paymentTerms/:paymentTermId', paymentTermController.removePaymentTerm)
 
 module.exports = router
