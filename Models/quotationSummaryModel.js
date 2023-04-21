@@ -49,7 +49,7 @@ quotationSummarySchema.pre('save', async function() {
   this.quotationExpiryDate = new Date()
   this.quotationExpiryDate.setMonth(this.quotationDate.getMonth() + 1)
   const quotationNumber = await this.constructor.countDocuments()
-  this.quotationNumber = "QOUT-" + 50000 + quotationNumber
+  this.quotationNumber = "QOUT-" + 50001 + quotationNumber
 })
 
 const QuotationSummaryModel = mongoose.model(
