@@ -35,10 +35,10 @@ class Product {
     }
   }
 
-  async updateProduct(id, data) {
+  async updateProduct(productId, data) {
     try {
       const updatedProduct = await this.productRepository.updateProduct(
-        id,
+        productId,
         data
       )
       return updatedProduct
@@ -47,30 +47,35 @@ class Product {
     }
   }
 
-  async removeProduct(id) {
+  async removeProduct(productId) {
     try {
-      const removedProduct = await this.productRepository.removeProduct(id)
+      const removedProduct = await this.productRepository.removeProduct(
+        productId
+      )
       return removedProduct
     } catch (error) {
       throw new Error(error.message)
     }
   }
 
-  async activateProduct(id) {
+  async activateProduct(productId) {
     try {
       const activatedProduct =
-        await this.productRepository.activateOrDeactivateProduct(id, 'activate')
+        await this.productRepository.activateOrDeactivateProduct(
+          productId,
+          'activate'
+        )
       return activatedProduct
     } catch (error) {
       throw new Error(error.message)
     }
   }
 
-  async deactivateProduct(id) {
+  async deactivateProduct(productId) {
     try {
       const deactivatedProduct =
         await this.productRepository.activateOrDeactivateProduct(
-          id,
+          productId,
           'deactivate'
         )
       return deactivatedProduct

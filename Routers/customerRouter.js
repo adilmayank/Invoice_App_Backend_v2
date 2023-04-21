@@ -24,10 +24,10 @@ router.get('/api/v2/customers/:id', customerController.getSingleCustomer)
 // update single customer
 router.patch('/api/v2/customers', customerController.updateSingleCustomer)
 
-// add or remove a contact agent for a customer
+// add a contact agent for a customer
 router.patch('/api/v2/customers/:id/contact-agents', customerController.addContactAgent)
 
-// add or remove a contact agent for a customer
+// remove a contact agent for a customer
 router.patch('/api/v2/customers/:id/contact-agents/:agentId', customerController.removeContactAgent)
 
 // change isActive Flag

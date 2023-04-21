@@ -18,9 +18,11 @@ class ProductController {
   }
 
   getSingleProduct = async (req, res) => {
-    const { id } = req.params
+    const { productId } = req.params
     try {
-      const singleProduct = await this.productService.getSingleProduct(id)
+      const singleProduct = await this.productService.getSingleProduct(
+        productId
+      )
       res.formattedJson(
         null,
         true,
@@ -34,9 +36,9 @@ class ProductController {
 
   addProduct = async (req, res) => {
     try {
-      const { data } = req.body
+      const { code, description, unitPrice } = req.body
       // some validation step which will return the validated data or throw an error
-      const validatedData = { ...data }
+      const validatedData = { code, description, unitPrice }
 
       const newProduct = await this.productService.addProduct(validatedData)
       res.formattedJson(null, true, 'Product Created successfully', newProduct)
@@ -47,11 +49,12 @@ class ProductController {
 
   updateProduct = async (req, res) => {
     try {
-      const { id, data } = req.body
+      const { productId } = req.params
+      const { name, description, unitPrice } = req.body
       // some validation step which will return the validated data or throw an error
-      const validatedData = { ...data }
+      const validatedData = { name, description, unitPrice }
       const updatedProduct = await this.productService.updateProduct(
-        id,
+        productId,
         validatedData
       )
 
@@ -72,8 +75,8 @@ class ProductController {
 
   removeProduct = async (req, res) => {
     try {
-      const { id } = req.body
-      const removedProduct = await this.productService.removeProduct(id)
+      const { productId } = req.body
+      const removedProduct = await this.productService.removeProduct(productId)
       if (removedProduct instanceof Error) {
         throw new Error(removedProduct.message)
       } else {
@@ -91,8 +94,10 @@ class ProductController {
 
   activateProduct = async (req, res) => {
     try {
-      const { id } = req.params
-      const activatedProduct = await this.productService.activateProduct(id)
+      const { productId } = req.params
+      const activatedProduct = await this.productService.activateProduct(
+        productId
+      )
       if (activatedProduct instanceof Error) {
         throw new Error(activatedProduct.message)
       } else {
@@ -110,8 +115,10 @@ class ProductController {
 
   deactivateProduct = async (req, res) => {
     try {
-      const { id } = req.params
-      const deactivatedProduct = await this.productService.deactivateProduct(id)
+      const { productId } = req.params
+      const deactivatedProduct = await this.productService.deactivateProduct(
+        productId
+      )
       if (deactivatedProduct instanceof Error) {
         throw new Error(deactivatedProduct.message)
       } else {

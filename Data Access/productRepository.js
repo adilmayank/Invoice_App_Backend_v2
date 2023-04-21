@@ -56,10 +56,10 @@ class ProductRepository {
     }
   }
 
-  async updateProduct(id, data) {
+  async updateProduct(productId, data) {
     try {
       const updatedProduct = await this.productModel.findByIdAndUpdate(
-        id,
+        productId,
         data,
         { new: true }
       )
@@ -72,9 +72,9 @@ class ProductRepository {
     }
   }
 
-  async removeProduct(id) {
+  async removeProduct(productId) {
     try {
-      const removedProduct = await this.productModel.findByIdAndRemove(id)
+      const removedProduct = await this.productModel.findByIdAndRemove(productId)
       if (removedProduct === null) {
         return new Error('No record found with the provided id.')
       }
